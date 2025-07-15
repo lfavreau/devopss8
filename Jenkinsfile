@@ -1,30 +1,51 @@
 pipeline {
   agent any
+
+  environment {
+    GIT_CRED = 'github-https'
+  }
+
   stages {
-    stage('Checkout') {
+    stage('Checkout SCM') {
       steps {
         checkout([$class: 'GitSCM',
           branches: [[name: '*/main']],
           userRemoteConfigs: [[
             url: 'https://github.com/lfavreau/devopss8.git',
-            credentialsId: 'github-https'
+            credentialsId: env.GIT_CRED
           ]]
         ])
       }
     }
-    stage('Build') {
-      sh 'chmod +x mvnw'
-      sh './mvnw clean package'
-    }
-    stage('Docker Image') {
-      steps { sh 'docker build -t vehiculos-rest .' }
-    }
-    stage('Deploy') {
+
+    stage('Build Application - Maven') {
       steps {
-        sh 'docker stop vehiculos-rest || true'
-        sh 'docker rm   vehiculos-rest || true'
-        sh 'docker run -d -p 9090:8080 --name vehiculos-rest vehiculos-rest'
+        sh 'chmod +x mvnw'
+        sh './mvnw clean package'
       }
+    }
+
+    stage('Docker Image') {
+      steps {
+        sh 'docker build -t imagen_vehiculos .'
+      }
+    }
+
+    stage('Deployment') {
+      steps {
+        sh 'docker stop contenedor_sucursal || true'
+        sh 'docker rm contenedor_sucursal   || true'
+        sh 'docker run -d -p 9090:8080 --name contenedor_sucursal imagen_vehiculos'
+      }
+    }
+  }
+
+  post {
+    success {
+      echo 'Pipeline completado con éxito.'
+    }
+    failure {
+      echo 'Pipeline falló. Revisa los logs.'
     }
   }
 }
