@@ -13,7 +13,8 @@ pipeline {
       }
     }
     stage('Build') {
-      steps { sh './mvnw clean package' }
+      sh 'chmod +x mvnw'
+      sh './mvnw clean package'
     }
     stage('Docker Image') {
       steps { sh 'docker build -t vehiculos-rest .' }
