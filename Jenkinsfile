@@ -3,7 +3,10 @@ pipeline {
 
   environment {
     GIT_CRED = 'github-https'
-  }
+    DB_URL      = 'jdbc:mysql://db-vehiculos.chi842w4epoh.eu-north-1.rds.amazonaws.com:3306/Sucursal'
+    DB_USER     = credentials('admin')
+    DB_PASSWORD = credentials('C4cuc41397')
+    }
 
   stages {
     stage('Checkout SCM') {
