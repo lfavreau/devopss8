@@ -7,6 +7,7 @@ pipeline {
   stages {
     stage('Checkout SCM') {
       steps {
+        cleanWs()
         checkout([
           $class: 'GitSCM',
           branches: [[name: '*/main']],
