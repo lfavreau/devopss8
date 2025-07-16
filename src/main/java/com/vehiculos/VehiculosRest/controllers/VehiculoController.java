@@ -38,7 +38,8 @@ public class VehiculoController {
     public ArrayList<VehiculoModel> getAutos(){
         return this.vehiculoService.getVehiculos();
     }
-
+    
+    // C
     @PostMapping
     public ResponseEntity<VehiculoModel> createVehiculo(@RequestBody VehiculoModel nuevo) {
         VehiculoModel creado = vehiculoService.saveAuto(nuevo);
@@ -46,6 +47,39 @@ public class VehiculoController {
                 .status(HttpStatus.CREATED)
                 .body(creado);
     }
+
+    // R
+    @GetMapping("/{id}")
+    public ResponseEntity<VehiculoModel> getVehiculo(@PathVariable Long id) {
+        return vehiculoService.getbyId(id)
+            .map(v -> ResponseEntity.ok(v))
+            .orElse(ResponseEntity.notFound().build());
+    }
+    
+    // U
+    @PutMapping("/{id}")
+    public ResponseEntity<VehiculoModel> updateVehiculo(
+            @PathVariable Long id,
+            @RequestBody VehiculoModel cambios) {
+        try {
+            VehiculoModel actualizado = vehiculoService.updateById(cambios, id);
+            return ResponseEntity.ok(actualizado);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    // D
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVehiculo(@PathVariable Long id) {
+        try {
+            vehiculoService.deleteAuto(id);
+            return ResponseEntity.noContent().build();
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+}
+
 
    
 }
