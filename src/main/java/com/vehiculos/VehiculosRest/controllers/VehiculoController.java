@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  *
  * @author Villacura
@@ -37,5 +38,14 @@ public class VehiculoController {
     public ArrayList<VehiculoModel> getAutos(){
         return this.vehiculoService.getVehiculos();
     }
+
+    @PostMapping
+    public ResponseEntity<VehiculoModel> createVehiculo(@RequestBody VehiculoModel nuevo) {
+        VehiculoModel creado = vehiculoService.saveAuto(nuevo);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(creado);
+    }
+
    
 }
