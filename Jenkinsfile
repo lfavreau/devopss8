@@ -42,6 +42,11 @@ pipeline {
         sh 'docker run -d -p 9090:8080 --name contenedor_sucursal imagen_vehiculos'
       }
     }
+    stage('Unit Tests') {
+      steps {
+        sh './mvnw test'
+      }
+    }
   }
   post {
     success { echo 'Pipeline completado con éxito.' }
