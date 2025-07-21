@@ -32,14 +32,14 @@ pipeline {
     }
     stage('Docker Image') {
       steps {
-        sh 'docker build -t imagen_vehiculos .'
+        sh 'docker build -t imagen_vehiculos:1.1 .'
       }
     }
     stage('Deployment') {
       steps {
         sh 'docker stop contenedor_sucursal || true'
         sh 'docker rm contenedor_sucursal || true'
-        sh 'docker run -d -p 9090:8080 --name contenedor_sucursal imagen_vehiculos'
+        sh 'docker run -d -p 9090:8080 --name contenedor_sucursal imagen_vehiculos:1.1'
       }
     }
     stage('Unit Tests') {
